@@ -1,0 +1,76 @@
+#include <stdio.h>
+
+#define NUM_ALUNOS 5
+#define NUM_NOTAS 4
+
+
+struct Aluno {
+    char nome[50];
+    float notas[NUM_NOTAS];
+    float nota_total;
+    float media;
+    char resultado[20];
+};
+
+
+void calcularNotaEMedia(struct Aluno *aluno) {
+    float total = 0;
+    for (int i = 0; i < NUM_NOTAS; i++) {
+        total += aluno->notas[i];
+    }
+    aluno->nota_total = total;
+    aluno->media = total / NUM_NOTAS;
+}
+
+
+void determinarResultado(struct Aluno *aluno) {
+    if (aluno->media < 4)
+        sprintf(aluno->resultado, "Reprovado");
+    else if (aluno->media >= 4 && aluno->media < 6)
+        sprintf(aluno->resultado, "Recuperação");
+    else
+        sprintf(aluno->resultado, "Aprovado");
+}
+
+int main() {
+    
+    struct Aluno alunos[NUM_ALUNOS];
+
+   
+    for (int i = 0; i < NUM_ALUNOS; i++) {
+        printf("Digite o nome do aluno %d: ", i + 1);
+        scanf("%s", alunos[i].nome);
+        printf("Digite as 4 notas do aluno %d (separadas por espaço): ", i + 1);
+        for (int j = 0; j < NUM_NOTAS; j++) {
+            scanf("%f", &alunos[i].notas[j]);
+        }
+       
+        calcularNotaEMedia(&alunos[i]);
+      
+        determinarResultado(&alunos[i]);
+    }
+
+
+    printf("\nResultados dos Alunos:\n");
+    for (int i = 0; i < NUM_ALUNOS; i++) {
+        printf("Aluno: %s\n", alunos[i].nome);
+        printf("Nota Total: %.2f\n", alunos[i].nota_total);
+        printf("Média: %.2f\n", alunos[i].media);
+        printf("Resultado: %s\n", alunos[i].resultado);
+        printf("\n");
+    }
+
+    
+    int aluno_editar;
+    printf("Digite o número do aluno que deseja editar: ");
+    scanf("%d", &aluno_editar);
+    if (aluno_editar >= 1 && aluno_editar <= NUM_ALUNOS) {
+        printf("Digite o novo resultado para o aluno %d: ", aluno_editar);
+        scanf("%s", alunos[aluno_editar - 1].resultado);
+        printf("Resultado atualizado com sucesso!\n");
+    } else {
+        printf("Número de aluno inválido!\n");
+    }
+
+    return 0;
+}
